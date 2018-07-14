@@ -1,8 +1,32 @@
-//demo.js
-//configファイル読み込み
+
 var accounts = require('./accounts.js');
 
-console.log(accounts);
-console.log(accounts[0][1]);
+var steps = [
+  function() {
+    console.log(0)
+  },
+  function() {
+    console.log(1)
+  },
+  function() {
+    console.log(2)
+  }
+];
 
-phantom.exit();
+
+
+for(var i = 0; i < accounts.lname.length; i++){
+  (function(i){
+    console.log('i = ' + i);
+    var testindex = 0;
+    var timer = setInterval(function(){
+      if (typeof steps[testindex] == 'function') {
+        steps[testindex]();
+        testindex++;
+      }
+      if (typeof steps[testindex] != 'function' && i == accounts.lname.length) {
+        phantom.exit();
+      }
+    }, 100);
+  }(i));
+}

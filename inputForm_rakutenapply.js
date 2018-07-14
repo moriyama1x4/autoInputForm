@@ -67,21 +67,19 @@ var steps = [
   },
   function() {
     // Create Screen Capture
-    page.evaluate(function(username) {
+    page.evaluate(function() {
       window.callPhantom();
-    }, username);
+    });
   }
 ];
 
-console.log('チェック開始.');
+
 interval = setInterval(function() {
   if (!loadInProgress && typeof steps[testindex] == 'function') {
-    // console.log('step ' + (testindex + 1));
     steps[testindex]();
     testindex++;
   }
   if (typeof steps[testindex] != 'function') {
-    console.log('チェック完了.');
     phantom.exit();
   }
 }, 50);
