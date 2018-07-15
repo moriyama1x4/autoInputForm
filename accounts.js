@@ -16,13 +16,13 @@ var accountsData = {
   'bYear' : [],
   'bMonth' : [],
   'bDay' : [],
-  'pustNum' : [],
+  'postNum' : [],
   'address1' : [],
   'address2' : [],
   'address3' : [],
-  'tel1' : [],
-  'tel2' : [],
-  'tel3' : []
+  'telNum1' : [],
+  'telNum2' : [],
+  'telNum3' : []
 }
 
 accounts.forEach(function(account){
@@ -35,15 +35,13 @@ accounts.forEach(function(account){
   accountsData.bYear.push(account[6]);
   accountsData.bMonth.push(account[7]);
   accountsData.bDay.push(account[8]);
-  accountsData.pustNum.push(account[9]);
+  accountsData.postNum.push(account[9]);
   accountsData.address1.push(account[10]);
   accountsData.address2.push(account[11]);
   accountsData.address3.push(account[12]);
-  accountsData.tel1.push(account[13]);
-  accountsData.tel2.push(account[14]);
-  accountsData.tel3.push(account[15]);
+  accountsData.telNum1.push(account[13]);
+  accountsData.telNum2.push(account[14]);
+  accountsData.telNum3.push(account[15]);
 });
-
-accountsData
 
 module.exports = accountsData;

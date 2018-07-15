@@ -1,13 +1,8 @@
-
-
 var url = 'https://booking.gora.golf.rakuten.co.jp/?menu=id&act=login&query=tp%3Dtop_my';
 var accounts = require('./accounts.js');
 
-
-
-
-
-for(var i = 2; i < 3; i++){
+var i = 4;
+ // for(var i = 4; i < accounts.lname.length; i++){}
   var page = new WebPage(), loadInProgress = false; testindex = 0;
   page.onLoadStarted = function() {
     loadInProgress = true;
@@ -30,15 +25,13 @@ for(var i = 2; i < 3; i++){
     },
     function() {
      // 会員登録画面へ遷移
-
-       console.log(JSON.stringify(document.getElementById('entryBtn')));
      page.evaluate(function() {
       document.getElementById('entryBtn').click();
      });
     },
     function() {
     // 入力画面
-      page.evaluate(function(i) {
+      page.evaluate(function(accounts, i) {
         var form =  document.getElementsByName('Regist1Form');
         form[0].elements['email'].value = accounts.email[i] + '@gmail.com';
         form[0].elements['email2'].value = accounts.email[i] + '@gmail.com';
@@ -49,6 +42,7 @@ for(var i = 2; i < 3; i++){
         form[0].elements['fname_kana'].value = accounts.fnameKana[i];
         form[0].elements['sex'][0].click();
         form[0].elements['zip.values'].value = accounts.postNum[i];
+        console.log(accounts.address1[i]);
         form[0].elements['prefecture'].value = accounts.address1[i];
         form[0].elements['city'].value = accounts.address2[i];
         form[0].elements['street'].value = accounts.address3[i];
@@ -56,7 +50,7 @@ for(var i = 2; i < 3; i++){
         form[0].elements['tel.valueAt[1]'].value = accounts.telNum2[i];
         form[0].elements['tel.valueAt[2]'].value = accounts.telNum3[i];
         return;
-      }, i);
+      }, accounts, i);
     },
     function() {
     // 入力画面　submit
@@ -81,16 +75,14 @@ for(var i = 2; i < 3; i++){
     }
   ];
 
+  function doStep(i, accounts){
+    if (!loadInProgress && typeof steps[testindex] == 'function') {
+      steps[testindex](i);
+      testindex++;
+    }else if (typeof steps[testindex] != 'function' && i == accounts.lname.length - 1) {
+      phantom.exit();
+    }
+  }
 
-
-  (function(i){
-    var timer = setInterval(function(){
-      if (typeof steps[testindex] == 'function') {
-        steps[testindex](i);
-        testindex++;
-      }else if (typeof steps[testindex] != 'function' && i == 3 - 1) {
-        phantom.exit();
-      }
-    }, 100);
-  }(i));
-}
+  interval = setInterval(function(){doStep(i, accounts)}, 100);
+// }

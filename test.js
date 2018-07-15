@@ -8,8 +8,8 @@ var steps = [
   function() {
     console.log(1)
   },
-  function() {
-    console.log(2)
+  function(roop) {
+    console.log('roop' + roop)
   }
 ];
 
@@ -21,10 +21,10 @@ for(var i = 0; i < accounts.lname.length; i++){
     var testindex = 0;
     var timer = setInterval(function(){
       if (typeof steps[testindex] == 'function') {
-        steps[testindex]();
+        steps[testindex](i);
         testindex++;
       }
-      if (typeof steps[testindex] != 'function' && i == accounts.lname.length) {
+      if (typeof steps[testindex] != 'function' && i == accounts.lname.length - 1) {
         phantom.exit();
       }
     }, 100);
