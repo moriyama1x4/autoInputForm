@@ -1,8 +1,8 @@
 var url = 'https://booking.gora.golf.rakuten.co.jp/?menu=id&act=login&query=tp%3Dtop_my';
 var accounts = require('./accounts.js');
 
-var i = 4;
- // for(var i = 4; i < accounts.lname.length; i++){}
+// var i = 4;
+ for(var i = 4; i < accounts.lname.length; i++){
   var page = new WebPage(), loadInProgress = false; testindex = 0;
   page.onLoadStarted = function() {
     loadInProgress = true;
@@ -85,4 +85,4 @@ var i = 4;
   }
 
   interval = setInterval(function(){doStep(i, accounts)}, 100);
-// }
+}
