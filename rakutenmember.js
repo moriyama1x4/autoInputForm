@@ -89,5 +89,3 @@ function doSteps(){
 }
 
 interval = setInterval(function() {doSteps()}, 100);
-
-
