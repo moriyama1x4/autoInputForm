@@ -1,21 +1,10 @@
-var url = 'https://booking.gora.golf.rakuten.co.jp/?menu=id&act=login&query=tp%3Dtop_my';
 var accounts = require('./accounts.js');
-var memIndex = 10; //何番目のアカウントから処理を始めるか
-var page = new WebPage(), loadInProgress = false; stepIndex = 0;
-
-page.onLoadStarted = function() {
-  loadInProgress = true;
-   console.log('ページ読み取り開始');
-};
-
-page.onLoadFinished = function() {
-  loadInProgress = false;
-   console.log('ページ読み取り完了');
-};
-
-page.onCallback = function() {
-  page.render('check.png');
-}
+var inputForm = require('./inputForm.js');
+var url = 'https://booking.gora.golf.rakuten.co.jp/?menu=id&act=login&query=tp%3Dtop_my';
+var startMemIndex = 0; //何番目のアカウントから処理を始めるか
+var endMemIndex = 0;//accounts.lname.length - 1;
+var memIndex = startMemIndex;
+var page = new WebPage();
 
 var steps = [
   function() {
@@ -30,9 +19,7 @@ var steps = [
   },
   function() {
   // 入力画面 入力
-  console.log('なか' + accounts.lname[memIndex]);
     page.evaluate(function(accounts, memIndex) {
-      console.log('なかなか');
       var form =  document.getElementsByName('Regist1Form');
       form[0].elements['email'].value = accounts.email[memIndex];
       form[0].elements['email2'].value = accounts.email[memIndex];
@@ -74,18 +61,4 @@ var steps = [
   }
 ];
 
-function doSteps(){
-  console.log('memIndex = ' + memIndex + '  stepIndex = ' + stepIndex);
-  if(typeof steps[stepIndex] != 'function' && memIndex == accounts.lname.length - 1){
-    console.log('処理終了');
-    phantom.exit();
-  }else if (!loadInProgress && typeof steps[stepIndex] == 'function') {//次のステップに移行
-    steps[stepIndex]();
-    stepIndex++;
-  }else if(!loadInProgress && typeof steps[stepIndex] != 'function'){//次のメンバーに移行
-    stepIndex = 0;
-    memIndex++;
-  }
-}
-
-interval = setInterval(function() {doSteps()}, 100);
+inputForm(page, url, startMemIndex, endMemIndex, steps);

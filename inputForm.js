@@ -1,5 +1,5 @@
-function inputForm(page, url, memIndex, steps){
-  var accounts = require('./accounts.js');
+function inputForm(page, url, startMemIndex, endMemIndex, steps){
+  var memIndex = startMemIndex;
   var loadInProgress = false; stepIndex = 0;
 
   page.onLoadStarted = function() {
@@ -18,7 +18,7 @@ function inputForm(page, url, memIndex, steps){
 
   function doSteps(){
     console.log('memIndex = ' + memIndex + '  stepIndex = ' + stepIndex);
-    if(typeof steps[stepIndex] != 'function' && memIndex == accounts.lname.length - 1){
+    if(typeof steps[stepIndex] != 'function' && memIndex == endMemIndex){
       console.log('処理終了');
       phantom.exit();
     }else if (!loadInProgress && typeof steps[stepIndex] == 'function') {//次のステップに移行
