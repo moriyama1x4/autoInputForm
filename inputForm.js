@@ -1,19 +1,19 @@
-function inputForm(page, url, startMemIndex, endMemIndex, steps){
+function inputForm(pages, url, startMemIndex, endMemIndex, steps){
   var memIndex = startMemIndex;
   var loadInProgress = false; stepIndex = 0;
 
-  page.onLoadStarted = function() {
+  pages[memIndex].onLoadStarted = function() {
     loadInProgress = true;
      console.log('ページ読み取り開始');
   };
 
-  page.onLoadFinished = function() {
+  pages[memIndex].onLoadFinished = function() {
     loadInProgress = false;
      console.log('ページ読み取り完了');
   };
 
-  page.onCallback = function() {
-    page.render('check.png');
+  pages[memIndex].onCallback = function() {
+    pages[memIndex].render('check' + memIndex + '.png');
   }
 
   function doSteps(){
@@ -22,7 +22,7 @@ function inputForm(page, url, startMemIndex, endMemIndex, steps){
       console.log('処理終了');
       phantom.exit();
     }else if (!loadInProgress && typeof steps[stepIndex] == 'function') {//次のステップに移行
-      steps[stepIndex]();
+      steps[stepIndex](memIndex);
       stepIndex++;
     }else if(!loadInProgress && typeof steps[stepIndex] != 'function'){//次のメンバーに移行
       stepIndex = 0;

@@ -1,29 +1,33 @@
 var accounts = require('./accounts.js');
 var inputForm = require('./inputForm.js');
 var url = 'https://usr.golfdigest.co.jp/pg/frlogin.php';
-var startMemIndex = 6; //何番目のアカウントから処理を始めるか
-var endMemIndex = 10;//accounts.lname.length - 1;
+var startMemIndex = 8; //何番目のアカウントから処理を始めるか
+var endMemIndex = 9;//accounts.lname.length - 1;
 var memIndex = startMemIndex;
-var page = new WebPage();
+var pages = [];
+
+for(var i = 0; i <= endMemIndex; i++){
+  if(i >= startMemIndex && i <= endMemIndex){
+    pages.push(new WebPage());
+  }else{
+    pages.push('');
+  }
+}
 
 var steps = [
-  // function() {
-  //   // 画面リセット
-  //   page = new WebPage();
-  // },
   function() {
-    // 会員登録画面ロード
-    page.open(url);
+    // ログイン画面ロード
+    pages[memIndex].open(url);
   },
   function() {
    // 会員登録画面へ遷移
-   page.evaluate(function() {
+   pages[memIndex].evaluate(function() {
     document.querySelector('p.link_btn > a').click()
    });
   },
   function() {
   // 入力画面 入力
-    page.evaluate(function(accounts, memIndex) {
+    pages[memIndex].evaluate(function(accounts, memIndex) {
       var form =  document.getElementsByName('index_form');
       form[0].elements['qEName'].value = accounts.lname[memIndex];
       form[0].elements['qEName2'].value = accounts.fname[memIndex];
@@ -41,24 +45,24 @@ var steps = [
   },
   function() {
   // 入力画面　submit
-   page.evaluate(function() {
+   pages[memIndex].evaluate(function() {
      var form = document.getElementsByName('index_form');
      form[0].submit();
    });
   },
   function() {
   // 確認画面　submit
-    page.evaluate(function() {
+    pages[memIndex].evaluate(function() {
       var form = document.getElementsByName('frm2');
       form[0].submit();
     });
   },
   function() {
     // キャプチャ
-    page.evaluate(function() {
+    pages[memIndex].evaluate(function() {
       window.callPhantom();
     });
   }
 ];
 
-inputForm(page, url, startMemIndex, endMemIndex, steps);
+inputForm(pages, url, startMemIndex, endMemIndex, steps);
