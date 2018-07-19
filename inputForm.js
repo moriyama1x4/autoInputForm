@@ -1,19 +1,19 @@
-function inputForm(pages, url, startMemIndex, endMemIndex, steps){
+function inputForm(page, startMemIndex, endMemIndex, steps){
   var memIndex = startMemIndex;
   var loadInProgress = false; stepIndex = 0;
 
-  pages[memIndex].onLoadStarted = function() {
+  page.onLoadStarted = function() {
     loadInProgress = true;
      console.log('ページ読み取り開始');
   };
 
-  pages[memIndex].onLoadFinished = function() {
+  page.onLoadFinished = function() {
     loadInProgress = false;
      console.log('ページ読み取り完了');
   };
 
-  pages[memIndex].onCallback = function() {
-    pages[memIndex].render('check' + memIndex + '.png');
+  page.onCallback = function() {
+    page.render('check' + memIndex + '.png');
   }
 
   function doSteps(){
@@ -30,7 +30,7 @@ function inputForm(pages, url, startMemIndex, endMemIndex, steps){
     }
   }
 
-  interval = setInterval(function() {doSteps()}, 100);
+  interval = setInterval(function() {doSteps()}, 1000);
 }
 
 module.exports = inputForm;
