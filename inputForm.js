@@ -4,12 +4,12 @@ function inputForm(page, startMemIndex, endMemIndex, steps){
 
   page.onLoadStarted = function() {
     loadInProgress = true;
-     console.log('ページ読み取り開始');
+    console.log('ページ読み取り開始');
   };
 
   page.onLoadFinished = function() {
     loadInProgress = false;
-     console.log('ページ読み取り完了');
+    console.log('ページ読み取り完了');
   };
 
   page.onCallback = function() {
