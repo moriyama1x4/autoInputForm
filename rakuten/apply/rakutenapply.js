@@ -1,38 +1,25 @@
-//var system = require('system');
-var page = new WebPage(), testindex = 0, loadInProgress = false;
-
-var url = 'https://booking.gora.golf.rakuten.co.jp/?menu=id&act=login&query=menu%3Dprv_camp%26act%3Dentry_input%26prv_camp_id%3D10610';
-var username = '***';
-var password = '***';
-
-
-page.onLoadStarted = function() {
-  loadInProgress = true;
-  // console.log('ページ読み取り開始');
-};
-
-page.onLoadFinished = function() {
-  loadInProgress = false;
-  // console.log('ページ読み取り完了');
-};
-
-page.onCallback = function() {
-  page.render('check.png');
-}
+var accounts = require('../../accounts.js');
+var inputForm = require('../../inputForm.js');
+var loginUrl = 'https://booking.gora.golf.rakuten.co.jp/?menu=id&act=login&query=menu%3Dprv_camp%26act%3Dentry_input%26prv_camp_id%3D10610';
+var formUrl = 'https://manager.gora.golf.rakuten.co.jp/?menu=prv_camp&act=entry_input&prv_camp_id=10646'
+var startMemIndex = 0; //何番目のアカウントから処理を始めるか
+var endMemIndex = 10;//accounts.lname.length - 1;
+var memIndex = startMemIndex;
+var page = new WebPage();
 
 var steps = [
   function() {
     // ログイン画面 ロード
-    page.open(url);
+    page.open(loginUrl);
   },
-  function() {
+  function(index) {
     // ログイン画面 ipass入力
-    page.evaluate(function(username, password) {
+    page.evaluate(function(accounts, index) {
       var form = document.getElementsByName('login');
-      form[0].elements['u'].value = username;
-      form[0].elements['p'].value = password;
+      form[0].elements['u'].value = accounts.email[index];
+      form[0].elements['p'].value = accounts.pwd[index];
       return;
-    }, username, password);
+    }, accounts, index);
   },
   function() {
     // ログイン画面　submit
@@ -40,6 +27,10 @@ var steps = [
       var form = document.getElementsByName('login');
       form[0].submit();
     });
+  },
+  function() {
+    // フォーム入力画面 ロード
+    page.open(formUrl);
   },
   function() {
   // フォーム入力画面
@@ -66,20 +57,11 @@ var steps = [
    });
   },
   function() {
-    // Create Screen Capture
+    // キャプチャ
     page.evaluate(function() {
       window.callPhantom();
     });
   }
 ];
 
-
-interval = setInterval(function() {
-  if (!loadInProgress && typeof steps[testindex] == 'function') {
-    steps[testindex]();
-    testindex++;
-  }
-  if (typeof steps[testindex] != 'function') {
-    phantom.exit();
-  }
-}, 50);
+inputForm(page, startMemIndex, endMemIndex, steps);

@@ -30,7 +30,7 @@ function inputForm(page, startMemIndex, endMemIndex, steps){
     }
   }
 
-  interval = setInterval(function() {doSteps()}, 1000);
+  interval = setInterval(function() {doSteps()}, 100);
 }
 
 module.exports = inputForm;

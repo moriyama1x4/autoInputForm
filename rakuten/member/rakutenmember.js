@@ -1,5 +1,5 @@
-var accounts = require('./accounts.js');
-var inputForm = require('./inputForm.js');
+var accounts = require('../../accounts.js');
+var inputForm = require('../../inputForm.js');
 var url = 'https://booking.gora.golf.rakuten.co.jp/?menu=id&act=login&query=tp%3Dtop_my';
 var startMemIndex = 2; //何番目のアカウントから処理を始めるか
 var endMemIndex = 3;//accounts.lname.length - 1;
