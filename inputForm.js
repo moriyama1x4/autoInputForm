@@ -1,6 +1,9 @@
-function inputForm(page, startMemIndex, endMemIndex, steps){
-  var memIndex = startMemIndex;
+function inputForm(page, formNum, startMemIndex, endMemIndex, steps){
   var loadInProgress = false; stepIndex = 0;
+  var index = {
+    'mem' : startMemIndex,
+    'form' : 0
+  };
 
   page.onLoadStarted = function() {
     loadInProgress = true;
@@ -13,24 +16,30 @@ function inputForm(page, startMemIndex, endMemIndex, steps){
   };
 
   page.onCallback = function() {
-    page.render('check' + memIndex + '.png');
-  }
+    page.render('check' + index['mem'] + '_' + index['form'] + '.png');
+  };
 
   function doSteps(){
-    console.log('memIndex = ' + memIndex + '  stepIndex = ' + stepIndex);
-    if(typeof steps[stepIndex] != 'function' && memIndex == endMemIndex){
-      console.log('処理終了');
-      phantom.exit();
-    }else if (!loadInProgress && typeof steps[stepIndex] == 'function') {//次のステップに移行
-      steps[stepIndex](memIndex);
-      stepIndex++;
-    }else if(!loadInProgress && typeof steps[stepIndex] != 'function'){//次のメンバーに移行
-      stepIndex = 0;
-      memIndex++;
+    if(!loadInProgress){
+      console.log('mem = ' + index['mem'] + ' form = ' + index['form'] + '  step = ' + stepIndex);
+      if (typeof steps[stepIndex] == 'function') {//次のステップに移行
+        steps[stepIndex](index);
+        stepIndex++;
+      }else if(index['form'] < formNum){//次のフォームに移行
+        stepIndex = 0;
+        index['form']++;
+      }else if(index['mem'] < endMemIndex){//次のアカウントに移行
+        stepIndex = 0;
+        index['form'] = 0;
+        index['mem']++;
+      }else{
+        console.log('処理終了');
+        phantom.exit();
+      }
     }
   }
 
-  interval = setInterval(function() {doSteps()}, 1000);
+  interval = setInterval(function() {doSteps()}, 3000);
 }
 
 module.exports = inputForm;
